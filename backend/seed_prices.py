@@ -83,7 +83,7 @@ STATE_DISTRICTS = {
     "Tripura":              [("West Tripura", "Agartala Market")],
     "Uttar Pradesh":        [("Lucknow", "Lucknow Mandi"), ("Agra", "Agra Market"), ("Varanasi", "Varanasi Mandi"), ("Kanpur Nagar", "Kanpur Market")],
     "Uttarakhand":          [("Dehradun", "Dehradun Mandi"), ("Haridwar", "Haridwar Market")],
-    "West Bengal":          [("Kolkata", "Kolkata Market"), ("Howrah", "Howrah Mandi"), ("Bardhaman", "Bardhaman Market")],
+    "West Bengal":          [("Kolkata", "Kolkata Market"), ("Howrah", "Howrah Mandi"), ("Bardhaman", "Bardhaman Market"), ("Paschim Bardhaman", "Asansol Market"), ("Purba Bardhaman", "Bardhaman Market Yard"), ("Hooghly", "Hooghly Mandi"), ("North 24 Parganas", "Barasat Market")],
     "Andaman and Nicobar":  [("South Andaman", "Port Blair Market")],
     "Chandigarh":           [("Chandigarh", "Chandigarh Mandi")],
     "Delhi":                [("New Delhi", "Azadpur Mandi"), ("South Delhi", "Okhla Market")],
@@ -121,63 +121,85 @@ def generate_price_series(base_price: float, spread_pct: float, num_days: int, r
     return prices
 
 
-def seed():
+def seed(clear_existing: bool = False) -> int:
+    """Seed the price_records table with realistic data. Returns number of records seeded."""
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
-    # Clear existing price records to avoid duplicates on re-run
-    existing = db.query(PriceRecord).count()
-    if existing > 0:
-        print(f"Clearing {existing} existing price records...")
-        db.query(PriceRecord).delete()
-        db.commit()
+    try:
+        existing = db.query(PriceRecord).count()
+        if existing > 0 and not clear_existing:
+            print(f"[seed_prices] Found {existing} existing price records. Skipping seed.")
+            return existing
 
-    rng = random.Random(SEED)
-    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    total = 0
-    batch = []
+        if existing > 0 and clear_existing:
+            print(f"Clearing {existing} existing price records...")
+            db.query(PriceRecord).delete()
+            db.commit()
 
-    for state, district_list in STATE_DISTRICTS.items():
-        for district, market in district_list:
-            for commodity, (base_price, spread) in COMMODITY_PROFILES.items():
-                # Use a deterministic sub-seed per combo for reproducibility
-                sub_seed = hash(f"{state}-{district}-{commodity}") % (2**31)
-                combo_rng = random.Random(sub_seed)
-                prices = generate_price_series(base_price, spread, DAYS_OF_DATA, combo_rng)
+        rng = random.Random(SEED)
+        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        total = 0
+        batch = []
 
-                for day_offset in range(DAYS_OF_DATA):
-                    date = today - timedelta(days=DAYS_OF_DATA - 1 - day_offset)
-                    modal, min_p, max_p = prices[day_offset]
-                    batch.append(PriceRecord(
-                        state=state,
-                        district=district,
-                        market=market,
-                        commodity=commodity,
-                        variety="Local",
-                        grade="FAQ",
-                        arrival_date=date,
-                        min_price=min_p,
-                        max_price=max_p,
-                        modal_price=modal,
-                    ))
-                    total += 1
+        for state, district_list in STATE_DISTRICTS.items():
+            for district, market in district_list:
+                for commodity, (base_price, spread) in COMMODITY_PROFILES.items():
+                    # Use a deterministic sub-seed per combo for reproducibility
+                    sub_seed = hash(f"{state}-{district}-{commodity}") % (2**31)
+                    combo_rng = random.Random(sub_seed)
+                    prices = generate_price_series(base_price, spread, DAYS_OF_DATA, combo_rng)
 
-                    # Batch insert every 5000 records
-                    if len(batch) >= 5000:
-                        db.bulk_save_objects(batch)
-                        db.commit()
-                        batch = []
-                        print(f"  ... {total} records inserted so far")
+                    for day_offset in range(DAYS_OF_DATA):
+                        date = today - timedelta(days=DAYS_OF_DATA - 1 - day_offset)
+                        modal, min_p, max_p = prices[day_offset]
+                        batch.append({
+                            "state": state,
+                            "district": district,
+                            "market": market,
+                            "commodity": commodity,
+                            "variety": "Local",
+                            "grade": "FAQ",
+                            "arrival_date": date,
+                            "min_price": min_p,
+                            "max_price": max_p,
+                            "modal_price": modal,
+                        })
+                        total += 1
 
-    if batch:
-        db.bulk_save_objects(batch)
-        db.commit()
+                        # Batch insert every 5000 records
+                        if len(batch) >= 5000:
+                            db.bulk_insert_mappings(PriceRecord, batch)
+                            db.commit()
+                            batch = []
+                            print(f"  ... {total} records inserted so far")
 
-    print(f"\n✅ Seeded {total} price records across {len(STATE_DISTRICTS)} states, "
-          f"{sum(len(d) for d in STATE_DISTRICTS.values())} districts, "
-          f"{len(COMMODITY_PROFILES)} commodities, {DAYS_OF_DATA} days each.")
-    db.close()
+        if batch:
+            db.bulk_insert_mappings(PriceRecord, batch)
+            db.commit()
+
+        print(f"\n[OK] Seeded {total} price records across {len(STATE_DISTRICTS)} states, "
+              f"{sum(len(d) for d in STATE_DISTRICTS.values())} districts, "
+              f"{len(COMMODITY_PROFILES)} commodities, {DAYS_OF_DATA} days each.")
+        return total
+    finally:
+        db.close()
+
+
+def seed_if_empty() -> int:
+    """Safe startup helper: only seeds if price_records table is currently empty."""
+    db = SessionLocal()
+    try:
+        count = db.query(PriceRecord).count()
+        if count == 0:
+            print("[seed_prices] No price records found in database. Seeding now...")
+            return seed(clear_existing=False)
+        return count
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
-    seed()
+    import sys
+    force = "--force" in sys.argv
+    seed(clear_existing=force)

@@ -144,6 +144,15 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(sync_prices, "interval", days=1, id="daily_price_sync")
 
 
+def _auto_seed_prices():
+    try:
+        from seed_prices import seed_if_empty
+        count = seed_if_empty()
+        logger.info("[price_seed] Startup price check complete (records=%d)", count)
+    except Exception as exc:
+        logger.warning("[price_seed] Auto price seeding failed: %s", exc)
+
+
 @app.on_event("startup")
 def start_scheduler():
     if os.getenv("ENVIRONMENT", "development").lower() != "production":
@@ -153,6 +162,12 @@ def start_scheduler():
             seed()
         except Exception:
             pass
+
+    # Ensure price records exist on fresh deployments (e.g. Render / Neon)
+    # Runs in a background daemon thread so Render port binding / health-check is never delayed
+    import threading
+    threading.Thread(target=_auto_seed_prices, daemon=True).start()
+
     try:
         scheduler.start()
     except Exception:
@@ -213,3 +228,20 @@ def trigger_backfill(current_user: User = Depends(get_current_user)):
         return {"status": "ok", "records_processed": count}
     except Exception as e:
         raise HTTPException(status_code=503, detail="Price backfill failed") from e
+
+
+@app.post("/admin/seed-prices")
+def trigger_seed_prices(
+    clear_existing: bool = False,
+    current_user: User = Depends(get_current_user),
+):
+    """Seed realistic historical mandi price records for all commodities & districts."""
+    if current_user.role != UserRole.admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    try:
+        from seed_prices import seed
+        count = seed(clear_existing=clear_existing)
+        return {"status": "ok", "records_seeded": count}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

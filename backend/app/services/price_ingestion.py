@@ -49,8 +49,8 @@ COMMODITIES = [
     "Capsicum",
 ]
 
-REQUEST_TIMEOUT = 60  # seconds
-MAX_RETRIES = 3
+REQUEST_TIMEOUT = 15  # seconds
+MAX_RETRIES = 2
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -88,6 +88,8 @@ def _fetch_page(
     offset: int = 0,
     state: str | None = None,
     arrival_date: str | None = None,
+    timeout: int = REQUEST_TIMEOUT,
+    max_retries: int = MAX_RETRIES,
 ) -> list[dict]:
     """Fetch a single page of records from data.gov.in."""
     api_key = _get_api_key()
@@ -103,10 +105,10 @@ def _fetch_page(
     if arrival_date:
         params["filters[arrival_date]"] = arrival_date
 
-    for attempt in range(1, MAX_RETRIES + 1):
+    for attempt in range(1, max_retries + 1):
         try:
             response = requests.get(
-                API_URL, params=params, headers=HEADERS, timeout=REQUEST_TIMEOUT
+                API_URL, params=params, headers=HEADERS, timeout=timeout
             )
             response.raise_for_status()
             data = response.json()
@@ -116,13 +118,9 @@ def _fetch_page(
                 f"[price_ingestion] Attempt {attempt} failed for "
                 f"{commodity} (state={state}, date={arrival_date}): {e}"
             )
-            if attempt == MAX_RETRIES:
-                print(
-                    f"[price_ingestion] Giving up on {commodity} "
-                    f"after {MAX_RETRIES} attempts"
-                )
+            if attempt == max_retries:
                 return []
-            time.sleep(2 * attempt)
+            time.sleep(1)
 
     return []
 
@@ -132,6 +130,8 @@ def fetch_commodity_records(
     limit: int = 500,
     state: str | None = None,
     arrival_date: str | None = None,
+    timeout: int = REQUEST_TIMEOUT,
+    max_retries: int = MAX_RETRIES,
 ) -> list[dict]:
     """
     Fetch records for a commodity, paginating automatically
@@ -147,6 +147,8 @@ def fetch_commodity_records(
             offset=offset,
             state=state,
             arrival_date=arrival_date,
+            timeout=timeout,
+            max_retries=max_retries,
         )
         all_records.extend(page)
         if len(page) < limit:
@@ -215,6 +217,7 @@ def fetch_live_prices(
     upsert results into the DB, and return matching PriceRecord objects.
 
     Called as a fallback when the /prices endpoint finds no local data.
+    Uses a strict 5-second timeout so user requests don't hang if data.gov.in is slow.
     """
     db = SessionLocal()
     try:
@@ -223,7 +226,7 @@ def fetch_live_prices(
             f"for {state} (district={district})"
         )
         records = fetch_commodity_records(
-            commodity=commodity, state=state, limit=500
+            commodity=commodity, state=state, limit=100, timeout=5, max_retries=1
         )
         print(
             f"[price_ingestion] Live-fetch returned {len(records)} records"

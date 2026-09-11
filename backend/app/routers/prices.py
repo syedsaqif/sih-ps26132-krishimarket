@@ -98,6 +98,20 @@ def get_prices(
             query = query.order_by(PriceRecord.arrival_date.desc())
             results = query.all()
 
+    # If district-level data yields no records, fall back to state-level
+    # so the price trend chart matches the state-level forecast
+    if not results and district and state:
+        fallback_query = db.query(PriceRecord)
+        if commodity:
+            fallback_query = fallback_query.filter(
+                func.lower(PriceRecord.commodity) == commodity.lower()
+            )
+        fallback_query = fallback_query.filter(
+            func.lower(PriceRecord.state) == state.lower()
+        )
+        fallback_query = fallback_query.order_by(PriceRecord.arrival_date.desc())
+        results = fallback_query.all()
+
     distinct_dates = sorted(
         {r.arrival_date for r in results if r.arrival_date}, reverse=True
     )[:days]
