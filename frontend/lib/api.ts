@@ -21,7 +21,7 @@ export interface FetchOptions extends RequestInit {
 }
 
 const TOKEN_KEY = "auth_token";
-const DEFAULT_API_URL = "http://localhost:8000";
+const DEFAULT_API_URL = "https://krishimarket-backend.onrender.com";
 
 /**
  * Resolve a backend-relative URL against the configured API origin.
@@ -31,7 +31,7 @@ const DEFAULT_API_URL = "http://localhost:8000";
 export function resolveApiUrl(path: string): string {
   if (/^[a-z][a-z\d+.-]*:/i.test(path)) return path;
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || DEFAULT_API_URL;
+  const baseUrl = process.env.https://krishimarket-backend.onrender.com || DEFAULT_API_URL;
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   return `${baseUrl}${normalizedPath}`;
 }
