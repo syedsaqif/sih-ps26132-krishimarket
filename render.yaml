@@ -9,6 +9,8 @@ services:
     envVars:
       - key: DATABASE_URL
         sync: false
+      - key: CORS_ORIGINS
+        value: https://krishimarket-frontend.onrender.com,http://localhost:3000,http://localhost:3001
 
   - type: web
     name: krishimarket-frontend
@@ -20,3 +22,5 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://krishimarket-backend.onrender.com
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://krishimarket-frontend.onrender.com

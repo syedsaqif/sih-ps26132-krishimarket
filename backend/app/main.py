@@ -82,17 +82,20 @@ app = FastAPI(
     redoc_url="/redoc" if os.getenv("ENVIRONMENT", "development") != "production" else None,
 )
 
+default_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    "https://krishimarket-frontend.onrender.com",
+]
+
 cors_origins_env = os.getenv("CORS_ORIGINS", "")
 if cors_origins_env:
-    allow_origins = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+    env_origins = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+    allow_origins = list(dict.fromkeys(env_origins + default_origins))
 else:
-    allow_origins = [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:3001",
-        "https://krishimarket-frontend.onrender.com",
-    ]
+    allow_origins = default_origins
 
 app.add_middleware(
     CORSMiddleware,

@@ -35,7 +35,7 @@ const notoDevanagari = Noto_Sans_Devanagari({
   variable: "--font-noto-devanagari",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://krishimarket.in";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://krishimarket-frontend.onrender.com";
 
 export const viewport: Viewport = {
   width: "device-width",
