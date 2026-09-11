@@ -78,6 +78,16 @@ PINCODE_PREFIX_TO_STATE: dict[str, str] = {
 
 # 3-digit PIN prefix mapping to major hub districts
 PINCODE_3DIGIT_DISTRICT_MAP: dict[str, tuple[str, str]] = {
+    # West Bengal
+    "700": ("Kolkata", "West Bengal"),
+    "711": ("Howrah", "West Bengal"),
+    "712": ("Hooghly", "West Bengal"),
+    "713": ("Paschim Bardhaman", "West Bengal"),
+    "743": ("North 24 Parganas", "West Bengal"),
+    "721": ("Paschim Medinipur", "West Bengal"),
+    "734": ("Darjeeling", "West Bengal"),
+
+    # Maharashtra
     "400": ("Mumbai City", "Maharashtra"),
     "401": ("Thane", "Maharashtra"),
     "411": ("Pune", "Maharashtra"),
@@ -87,10 +97,60 @@ PINCODE_3DIGIT_DISTRICT_MAP: dict[str, tuple[str, str]] = {
     "416": ("Kolhapur", "Maharashtra"),
     "422": ("Nashik", "Maharashtra"),
     "440": ("Nagpur", "Maharashtra"),
+
+    # Delhi
+    "110": ("New Delhi", "Delhi"),
+
+    # Gujarat
     "380": ("Ahmedabad", "Gujarat"),
     "360": ("Rajkot", "Gujarat"),
     "395": ("Surat", "Gujarat"),
+
+    # Karnataka
     "560": ("Bengaluru", "Karnataka"),
+    "570": ("Mysore", "Karnataka"),
+    "580": ("Hubli", "Karnataka"),
+
+    # Tamil Nadu
+    "600": ("Chennai", "Tamil Nadu"),
+    "641": ("Coimbatore", "Tamil Nadu"),
+    "625": ("Madurai", "Tamil Nadu"),
+
+    # Telangana & Andhra
+    "500": ("Hyderabad", "Telangana"),
+    "506": ("Warangal", "Telangana"),
+    "520": ("Krishna", "Andhra Pradesh"),
+    "522": ("Guntur", "Andhra Pradesh"),
+
+    # Uttar Pradesh
+    "226": ("Lucknow", "Uttar Pradesh"),
+    "282": ("Agra", "Uttar Pradesh"),
+    "221": ("Varanasi", "Uttar Pradesh"),
+    "208": ("Kanpur Nagar", "Uttar Pradesh"),
+
+    # Punjab & Haryana
+    "141": ("Ludhiana", "Punjab"),
+    "143": ("Amritsar", "Punjab"),
+    "160": ("Chandigarh", "Chandigarh"),
+    "132": ("Karnal", "Haryana"),
+
+    # Rajasthan
+    "302": ("Jaipur", "Rajasthan"),
+    "342": ("Jodhpur", "Rajasthan"),
+    "324": ("Kota", "Rajasthan"),
+
+    # Madhya Pradesh
+    "452": ("Indore", "Madhya Pradesh"),
+    "462": ("Bhopal", "Madhya Pradesh"),
+
+    # Bihar & Jharkhand & Odisha
+    "800": ("Patna", "Bihar"),
+    "834": ("Ranchi", "Jharkhand"),
+    "751": ("Khordha", "Odisha"),
+
+    # Kerala
+    "682": ("Ernakulam", "Kerala"),
+    "695": ("Thiruvananthapuram", "Kerala"),
 }
 
 

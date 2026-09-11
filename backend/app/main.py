@@ -144,13 +144,20 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(sync_prices, "interval", days=1, id="daily_price_sync")
 
 
-def _auto_seed_prices():
+def _auto_seed_data():
     try:
         from seed_prices import seed_if_empty
-        count = seed_if_empty()
-        logger.info("[price_seed] Startup price check complete (records=%d)", count)
+        p_count = seed_if_empty()
+        logger.info("[auto_seed] Price check complete (records=%d)", p_count)
     except Exception as exc:
-        logger.warning("[price_seed] Auto price seeding failed: %s", exc)
+        logger.warning("[auto_seed] Price seeding failed: %s", exc)
+
+    try:
+        from seed_hubs import seed_hubs_if_empty
+        h_count = seed_hubs_if_empty()
+        logger.info("[auto_seed] Hub check complete (hubs=%d)", h_count)
+    except Exception as exc:
+        logger.warning("[auto_seed] Hub seeding failed: %s", exc)
 
 
 @app.on_event("startup")
@@ -163,10 +170,10 @@ def start_scheduler():
         except Exception:
             pass
 
-    # Ensure price records exist on fresh deployments (e.g. Render / Neon)
+    # Ensure price records & hubs exist on fresh deployments (e.g. Render / Neon)
     # Runs in a background daemon thread so Render port binding / health-check is never delayed
     import threading
-    threading.Thread(target=_auto_seed_prices, daemon=True).start()
+    threading.Thread(target=_auto_seed_data, daemon=True).start()
 
     try:
         scheduler.start()
@@ -244,4 +251,21 @@ def trigger_seed_prices(
         return {"status": "ok", "records_seeded": count}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/admin/seed-hubs")
+def trigger_seed_hubs(
+    clear_existing: bool = False,
+    current_user: User = Depends(get_current_user),
+):
+    """Seed logistics hubs & baseline transporters across all states and districts."""
+    if current_user.role != UserRole.admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    try:
+        from seed_hubs import seed_hubs
+        count = seed_hubs(clear_existing=clear_existing)
+        return {"status": "ok", "hubs_seeded": count}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
