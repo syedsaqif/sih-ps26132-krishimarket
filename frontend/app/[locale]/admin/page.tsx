@@ -351,7 +351,7 @@ function AdminPanelInner() {
                   key={dispute.id}
                   className="border-l-4 border-l-red-400"
                 >
-                  <CardHeader className="pb-2">
+                  <CardHeader className="pb-3">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <CardTitle className="text-base">

@@ -35,10 +35,8 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
+import { StatCard } from "@/components/stat-card";
 import {
   Loader2,
   Receipt,
@@ -324,46 +322,26 @@ function TransactionsInner() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="flex items-center gap-1.5 text-xs uppercase tracking-wide">
-              <Receipt className="h-3 w-3" />
-              {t("totalDeals")}
-            </CardDescription>
-            <CardTitle className="text-3xl">{counts.all}</CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="flex items-center gap-1.5 text-xs uppercase tracking-wide">
-              <Banknote className="h-3 w-3" />
-              {t("totalValue")}
-            </CardDescription>
-            <CardTitle className="text-2xl">
-              {formatINR(counts.volume)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {t("pendingPayment")}
-            </CardDescription>
-            <CardTitle className="text-3xl text-accent">
-              {counts.pending}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {t("completed")}
-            </CardDescription>
-            <CardTitle className="text-3xl text-primary">
-              {counts.paid}
-            </CardTitle>
-          </CardHeader>
-        </Card>
+        <StatCard
+          label={t("totalDeals")}
+          value={counts.all}
+          icon={Receipt}
+        />
+        <StatCard
+          label={t("totalValue")}
+          value={formatINR(counts.volume)}
+          icon={Banknote}
+        />
+        <StatCard
+          label={t("pendingPayment")}
+          value={counts.pending}
+          valueClassName="text-accent"
+        />
+        <StatCard
+          label={t("completed")}
+          value={counts.paid}
+          valueClassName="text-primary"
+        />
       </div>
 
       <div className="flex gap-0 border-b border-border/50 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
@@ -525,11 +503,11 @@ function TransactionsInner() {
                       </div>
                     </div>
 
-                    <div className="rounded-lg bg-secondary/50 p-4">
-                      <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                    <div className="rounded-xl border border-border/50 bg-secondary/50 p-4 sm:p-5 min-w-[150px]">
+                      <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         {t("finalAmount")}
                       </div>
-                      <div className="mt-1 text-3xl font-bold text-primary">
+                      <div className="mt-1.5 text-2xl sm:text-3xl font-bold text-primary tabular-nums leading-tight">
                         {item.total_amount ? formatINR(item.total_amount) : "—"}
                       </div>
                     </div>

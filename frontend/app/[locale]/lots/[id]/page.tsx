@@ -235,34 +235,34 @@ export default function LotDetailPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid gap-px rounded-lg border border-border/60 bg-border/60 sm:grid-cols-3 overflow-hidden">
-                    <div className="space-y-1 bg-card px-5 py-4">
-                      <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                    <div className="space-y-1.5 bg-card px-5 py-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         {t("askingPrice")}
                       </div>
-                      <div className="text-2xl font-bold text-primary">
+                      <div className="text-2xl font-bold text-primary tabular-nums leading-tight">
                         {formatINR(lot.asking_price_per_kg)}
                         <span className="ml-1 text-sm font-medium text-muted-foreground">
                           {tCommon("perKg")}
                         </span>
                       </div>
                     </div>
-                    <div className="space-y-1 bg-card px-5 py-4">
-                      <div className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
-                        <Scale className="h-3 w-3" />
+                    <div className="space-y-1.5 bg-card px-5 py-4">
+                      <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                        <Scale className="h-3 w-3 shrink-0" />
                         {t("availableQty")}
                       </div>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold tabular-nums leading-tight">
                         {lot.quantity_kg}
                         <span className="ml-1 text-sm font-medium text-muted-foreground">
                           {tCommon("kg")}
                         </span>
                       </div>
                     </div>
-                    <div className="space-y-1 bg-card px-5 py-4">
-                      <div className="text-xs uppercase tracking-wide text-muted-foreground">
+                    <div className="space-y-1.5 bg-card px-5 py-4">
+                      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         {t("totalValue")}
                       </div>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold tabular-nums leading-tight">
                         {formatINR(
                           Number(lot.asking_price_per_kg) * Number(lot.quantity_kg)
                         )}

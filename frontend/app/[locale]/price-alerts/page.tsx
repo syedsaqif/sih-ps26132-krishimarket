@@ -285,7 +285,7 @@ function PriceAlertsInner() {
                 {alerts.map((a) => (
                   <li key={a.id}>
                     <Card>
-                      <CardContent className="flex items-center justify-between gap-3 py-3">
+                      <CardContent className="flex items-center justify-between gap-3 py-3.5 sm:py-4">
                         <div className="min-w-0">
                           <p className="font-medium">
                             {t("matches", {

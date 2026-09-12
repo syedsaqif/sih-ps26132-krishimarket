@@ -123,7 +123,7 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center py-8">
       <Card className="w-full max-w-lg">
-        <CardHeader className="space-y-1 text-center">
+        <CardHeader className="space-y-1 text-center sm:p-8 sm:pb-4">
           <CardTitle className="text-2xl font-bold">
             {step === "details" ? t("title") : t("verifyTitle")}
           </CardTitle>
@@ -138,7 +138,7 @@ export default function RegisterPage() {
           } : verifySignupOtp}
           noValidate
         >
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 sm:px-8">
             {step === "details" && <HoneypotField {...honeypot.fieldProps} />}
 
             {error && (
@@ -295,7 +295,7 @@ export default function RegisterPage() {
             )}
           </CardContent>
 
-          <CardFooter className="flex-col gap-4">
+          <CardFooter className="flex-col gap-4 sm:px-8 sm:pb-8">
             {step === "details" ? (
               <>
                 <Button type="submit" className="w-full" disabled={isSubmitting}>

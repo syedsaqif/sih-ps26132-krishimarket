@@ -86,11 +86,11 @@ export default function OtpLoginPage() {
   return (
     <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center py-8">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
+        <CardHeader className="space-y-1 text-center sm:p-8 sm:pb-4">
           <CardTitle className="text-2xl font-bold">{t("title")}</CardTitle>
           <CardDescription>{t("subtitle")}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-5 sm:p-8 sm:pt-0">
           {step === "phone" ? (
             <form
               onSubmit={(e) => {

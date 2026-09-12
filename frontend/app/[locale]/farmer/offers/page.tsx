@@ -16,10 +16,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
+import { StatCard } from "@/components/stat-card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -170,32 +169,19 @@ function FarmerOffersInner() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {t("lotsWithOffers")}
-            </CardDescription>
-            <CardTitle className="text-3xl">{groups.length}</CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {t("total")}
-            </CardDescription>
-            <CardTitle className="text-3xl">{totalOffers}</CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {t("awaiting")}
-            </CardDescription>
-            <CardTitle className="text-3xl text-amber-600">
-              {pendingOffers}
-            </CardTitle>
-          </CardHeader>
-        </Card>
+        <StatCard
+          label={t("lotsWithOffers")}
+          value={groups.length}
+        />
+        <StatCard
+          label={t("total")}
+          value={totalOffers}
+        />
+        <StatCard
+          label={t("awaiting")}
+          value={pendingOffers}
+          valueClassName="text-amber-600"
+        />
       </div>
 
       {isLoading ? (

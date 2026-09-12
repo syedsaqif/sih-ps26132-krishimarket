@@ -25,7 +25,7 @@ function NavLink({
     <Link
       href={href}
       onClick={onClick}
-      className={`relative text-sm font-medium transition-colors duration-150 ${
+      className={`relative text-sm font-medium whitespace-nowrap shrink-0 transition-colors duration-150 ${
         active
           ? "text-primary after:absolute after:-bottom-[21px] after:left-0 after:right-0 after:h-[2px] after:rounded-full after:bg-primary"
           : "text-muted-foreground hover:text-foreground"

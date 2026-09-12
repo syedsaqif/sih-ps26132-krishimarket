@@ -375,7 +375,7 @@ export default function BrowseLotsPage() {
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-3 pt-0">
+                  <CardContent className="space-y-3.5 pt-0">
                     {/* Qty + Price */}
                     <div className="flex items-center gap-4 text-sm">
                       <div className="flex items-center gap-1.5 text-muted-foreground">

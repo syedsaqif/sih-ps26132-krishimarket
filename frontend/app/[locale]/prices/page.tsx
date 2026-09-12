@@ -260,24 +260,24 @@ function PredictionBlock({
 }) {
   const isUp = delta >= 0;
   return (
-    <div className="flex flex-col items-start gap-1 rounded-xl border border-border/70 bg-card/80 backdrop-blur-sm px-4 py-3 min-w-[140px] transition-all hover:shadow-sm">
-      <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-        <Icon className="h-3 w-3" />
+    <div className="flex flex-col items-start justify-between gap-2 rounded-xl border border-border/70 bg-card/80 backdrop-blur-sm p-4 sm:p-5 min-w-[155px] transition-all hover:shadow-sm">
+      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+        <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground/80" />
         {label}
       </span>
-      <span className="text-xl font-bold tracking-tight text-foreground">
+      <span className="text-2xl font-bold tracking-tight text-foreground tabular-nums leading-tight">
         {formatINR(price)}
       </span>
       <span
         className={cn(
-          "flex items-center gap-0.5 text-xs font-semibold",
+          "flex items-center gap-1 text-xs font-semibold mt-0.5",
           isUp ? "text-primary" : "text-destructive"
         )}
       >
         {isUp ? (
-          <TrendingUp className="h-3 w-3" />
+          <TrendingUp className="h-3.5 w-3.5 shrink-0" />
         ) : (
-          <TrendingDown className="h-3 w-3" />
+          <TrendingDown className="h-3.5 w-3.5 shrink-0" />
         )}
         {isUp ? "+" : ""}
         {delta.toFixed(1)}%
@@ -729,14 +729,14 @@ export default function PriceDiscoveryPage() {
                         )}
                       </div>
 
-                      <div className="space-y-0.5">
-                        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground flex items-center gap-1">
-                          <IndianRupee className="h-3 w-3" />
+                      <div className="space-y-2">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                          <IndianRupee className="h-3.5 w-3.5" />
                           Current Modal Price
                         </p>
-                        <p className="text-4xl font-extrabold tracking-tight">
+                        <p className="text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums leading-tight">
                           {formatINR(forecast.current_price)}
-                          <span className="ml-1 text-base font-normal text-muted-foreground">
+                          <span className="ml-1.5 text-base font-normal text-muted-foreground">
                             {t("perQuintal")}
                           </span>
                         </p>

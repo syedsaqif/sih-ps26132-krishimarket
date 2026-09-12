@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -192,7 +193,7 @@ function VerificationInner() {
                     </label>
                   </div>
                 </CardContent>
-                <CardContent className="pt-0">
+                <CardFooter>
                   <Button
                     type="submit"
                     className="w-full"
@@ -207,7 +208,7 @@ function VerificationInner() {
                       t("submit")
                     )}
                   </Button>
-                </CardContent>
+                </CardFooter>
               </form>
             </Card>
           )}

@@ -118,8 +118,8 @@ export default function ProfilePage() {
             <CardContent className="space-y-2">
               {summary.total_ratings > 0 ? (
                 <>
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl font-bold">
+                  <div className="flex items-center gap-4">
+                    <span className="text-3xl font-bold tabular-nums leading-none">
                       {summary.average_rating?.toFixed(1) ?? "—"}
                     </span>
                     <div>
@@ -144,18 +144,26 @@ export default function ProfilePage() {
               <CardHeader>
                 <CardTitle className="text-lg">{t("disputeSummary")}</CardTitle>
               </CardHeader>
-              <CardContent className="grid gap-2 text-sm sm:grid-cols-3">
-                <div>
-                  <p className="text-muted-foreground">{t("totalDisputes")}</p>
-                  <p className="text-xl font-semibold">{disputes.total_disputes}</p>
+              <CardContent className="grid gap-4 text-sm sm:grid-cols-3">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {t("totalDisputes")}
+                  </p>
+                  <p className="text-2xl font-bold tabular-nums">{disputes.total_disputes}</p>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">{t("resolved")}</p>
-                  <p className="text-xl font-semibold">{disputes.resolved_count}</p>
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {t("resolved")}
+                  </p>
+                  <p className="text-2xl font-bold text-primary tabular-nums">
+                    {disputes.resolved_count}
+                  </p>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">{t("open")}</p>
-                  <p className="text-xl font-semibold">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {t("open")}
+                  </p>
+                  <p className="text-2xl font-bold text-amber-600 tabular-nums">
                     {Math.max(0, disputes.total_disputes - disputes.resolved_count)}
                   </p>
                 </div>

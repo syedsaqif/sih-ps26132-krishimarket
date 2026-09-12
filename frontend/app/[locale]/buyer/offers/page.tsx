@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { StatCard } from "@/components/stat-card";
 import {
   Loader2,
   Inbox,
@@ -102,45 +103,26 @@ function BuyerOffersInner() {
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {t("total")}
-            </CardDescription>
-            <CardTitle className="text-3xl">{counts.all}</CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {tOffers("statusPending")}
-            </CardDescription>
-            <CardTitle className="text-3xl text-amber-600">
-              {counts.pending}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {tOffers("statusAccepted")}
-            </CardDescription>
-            <CardTitle className="text-3xl text-primary">
-              {counts.accepted}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs uppercase tracking-wide">
-              {tOffers("statusRejected")}
-            </CardDescription>
-            <CardTitle className="text-3xl text-slate-500">
-              {counts.rejected}
-            </CardTitle>
-          </CardHeader>
-        </Card>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label={t("total")}
+          value={counts.all}
+        />
+        <StatCard
+          label={tOffers("statusPending")}
+          value={counts.pending}
+          valueClassName="text-amber-600"
+        />
+        <StatCard
+          label={tOffers("statusAccepted")}
+          value={counts.accepted}
+          valueClassName="text-primary"
+        />
+        <StatCard
+          label={tOffers("statusRejected")}
+          value={counts.rejected}
+          valueClassName="text-slate-500"
+        />
       </div>
 
       <div className="flex flex-wrap gap-2 border-b">

@@ -101,8 +101,8 @@ function NotificationsInner() {
               type="button"
               onClick={() => markRead(n.id)}
               className={cn(
-                "block w-full rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-muted",
-                !n.is_read && "border-primary/30 bg-primary/5"
+                "block w-full rounded-xl border border-border/60 bg-card p-4 sm:p-5 text-left transition-all hover:bg-muted/40",
+                !n.is_read && "border-primary/40 bg-primary/5"
               )}
             >
               <div className="flex items-start justify-between gap-3">

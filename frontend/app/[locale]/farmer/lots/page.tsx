@@ -543,10 +543,10 @@ function FarmerLotsInner() {
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3 pt-0">
+                <CardContent className="space-y-3.5 pt-0">
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <Scale className="h-4 w-4" />
+                      <Scale className="h-4 w-4 shrink-0" />
                       <span>
                         <span className="font-medium text-foreground">
                           {lot.quantity_kg}
@@ -555,7 +555,7 @@ function FarmerLotsInner() {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <Tag className="h-4 w-4" />
+                      <Tag className="h-4 w-4 shrink-0" />
                       <span>
                         <span className="font-semibold text-primary">
                           {formatINR(lot.asking_price_per_kg)}
@@ -565,7 +565,7 @@ function FarmerLotsInner() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center justify-between gap-2 text-xs">
                     <Badge
                       variant="outline"
                       className={gradeBadgeClass(lot.quality_grade)}
@@ -573,16 +573,16 @@ function FarmerLotsInner() {
                       {tLots("grade", { grade: lot.quality_grade })}
                     </Badge>
                     {location ? (
-                      <span className="inline-flex items-center gap-1 text-muted-foreground">
-                        <MapPin className="h-3.5 w-3.5" />
-                        {location}
+                      <span className="inline-flex items-center gap-1 text-muted-foreground truncate">
+                        <MapPin className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">{location}</span>
                       </span>
                     ) : null}
                   </div>
 
                   {lot.hub_name ? (
-                    <div className="flex items-center gap-1.5 rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                      <Truck className="h-3.5 w-3.5" />
+                    <div className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
+                      <Truck className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">
                         {t("hubLabel")}: {lot.hub_name}
                       </span>

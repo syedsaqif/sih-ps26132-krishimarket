@@ -184,7 +184,7 @@
 
   /* Stat card numbers — large dashboard metrics */
   .stat-number {
-    @apply text-3xl font-bold tabular-nums leading-none;
+    @apply text-2xl sm:text-3xl font-bold tabular-nums leading-tight tracking-tight;
   }
 
   /* Page title pattern */
