@@ -1,4 +1,4 @@
-# KisaanSetu
+# KrishiMarket
 
 **AI-Powered Price Intelligence & Direct Marketplace for Farmers**
 
